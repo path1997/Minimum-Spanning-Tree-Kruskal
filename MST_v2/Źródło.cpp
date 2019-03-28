@@ -23,7 +23,7 @@
 class MST {
 public:
 
-	int **drogi,*kolor,pierwsza_dana,druga_dana,trzecia_dana,il_miast,il_drog,il_galezi=0,*dobre,*zle,*wsp;
+	int **drogi, *kolor, pierwsza_dana, druga_dana, trzecia_dana, il_miast, il_drog, il_galezi = 0, *dobre, *zle, *wsp,**drogi_temp;
 
 	MST() {
 	}
@@ -40,12 +40,10 @@ public:
 		std::cin >> il_miast;
 		std::cin >> il_drog;
 
-		kolor = new int [il_miast+1];
-		dobre = new int[il_galezi];
-		zle = new int[il_galezi];
+		kolor = new int[il_miast + 1];
 		wsp = new int[3];
 
-		
+
 		drogi = new int *[il_drog];
 		for (int i = 0; i < il_drog; i++) {
 			drogi[i] = new int[3];
@@ -75,18 +73,31 @@ public:
 				il_galezi++;
 			}
 		}
-
-		for (int i = 0; i <il_galezi; i++) {
-			for (int j = 0; j < 3; j++) {
-				std::cout << drogi[i][j] << " ";
-			}
-			std::cout << std::endl;
+		dobre = new int[il_galezi];
+		zle = new int[il_galezi];
+		drogi_temp = new int *[il_galezi];
+		for (int i = 0; i < il_galezi; i++) {
+			drogi_temp[i] = new int[3];
 		}
+		
 
 		std::cin >> pierwsza_dana;
 		std::cin >> druga_dana;
 		while (pierwsza_dana != 0 && druga_dana != 0) {
 			std::cin >> trzecia_dana;
+			for (int i = 0; i < il_galezi; i++) {
+				for (int j = 0; j < 3; j++) {
+					drogi_temp[i][j] = drogi[i][j];
+				}
+			}
+
+
+			for (int i = 0; i < il_galezi; i++) {
+				for (int j = 0; j < 3; j++) {
+					std::cout << drogi_temp[i][j] << " ";
+				}
+				std::cout << std::endl;
+			}
 			analiza();
 			for (int i = 0; i < il_galezi; i++) {
 				std::cout << dobre[i] << " ";
@@ -94,8 +105,8 @@ public:
 			std::cin >> pierwsza_dana;
 			std::cin >> druga_dana;
 		}
-		
-		
+
+
 	}
 
 	void analiza() {
@@ -108,20 +119,22 @@ public:
 		int poczatek = pierwsza_dana;
 		int koniec = druga_dana;
 		int il_osob = trzecia_dana;
-		
+
 		wyszukaj(poczatek);
 		dobre[licznik_d] = wsp[0];
-		
+
 		while (wsp[2] != koniec) {
-			std::cout << "WSP0:" << wsp[0] <<" WSP1:"<<wsp[1]<< " WSP2:" << wsp[2] << std::endl;
+			std::cout << "WSP0:" << wsp[0] << " WSP1:" << wsp[1] << " WSP2:" << wsp[2] << std::endl;
 			if (czy_istnieje_dalej(wsp[2]) == true) {
 				wyszukaj(wsp[2]);
 				licznik_d++;
 				dobre[licznik_d] = wsp[0];
 			}
 			else {
-				zle[licznik_z] = dobre[licznik_d];
-				licznik_z++;
+				drogi_temp[dobre[licznik_d]][0]=-1;
+				drogi_temp[dobre[licznik_d]][1] = -1;
+				drogi_temp[dobre[licznik_d]][2] = -1;
+				//licznik_z++;
 				dobre[licznik_d] = -1;
 				wyszukaj(wsp[1]);
 				dobre[licznik_d] = wsp[0];
@@ -143,21 +156,21 @@ public:
 		for (int c = 0; c < il_galezi; c++) {
 			stan_wyszukaj = false;
 			for (int v = 0; v < il_galezi; v++) {
-				if (c == dobre[v] || c == zle[v]) {
+				if (c == dobre[v]) {
 					stan_wyszukaj = true;
 				}
 				if (stan_wyszukaj == false) {
-					if (drogi[c][0] == liczba) {
+					if (drogi_temp[c][0] == liczba) {
 						wsp[0] = c;
-						wsp[1] = drogi[c][0];
-						wsp[2] = drogi[c][1];
+						wsp[1] = drogi_temp[c][0];
+						wsp[2] = drogi_temp[c][1];
 						return;
 					}
-					else if (drogi[c][1] == liczba) {
+					else if (drogi_temp[c][1] == liczba) {
 						wsp[0] = c;
-						wsp[2] = drogi[c][0];
-						wsp[1] = drogi[c][1];
-						std::swap(drogi[c][0], drogi[c][1]);
+						wsp[2] = drogi_temp[c][0];
+						wsp[1] = drogi_temp[c][1];
+						std::swap(drogi_temp[c][0], drogi_temp[c][1]);
 						return;
 					}
 				}
@@ -169,13 +182,13 @@ public:
 		for (int i = 0; i < il_galezi; i++) {
 			bool stan = false;
 			for (int j = 0; j < il_galezi; j++) {
-				if (i == dobre[j] || i == zle[j]) {
+				if (i == dobre[j]) {
 					stan = true;
 					break;
 				}
 			}
 			if (stan == false) {
-				if (drogi[i][0] == liczba || drogi[i][1] == liczba) {
+				if (drogi_temp[i][0] == liczba || drogi_temp[i][1] == liczba) {
 					return true;
 				}
 			}
@@ -223,7 +236,6 @@ public:
 		}
 		return false;
 	}
-
 	void wyszukaj(int liczba) {
 		bool stan2 = false;
 		for (int k = 0; k < il_galezi; k++) {
@@ -267,9 +279,9 @@ public:
 			if (y == kolor[k]) {
 				kolor[k] = x;
 			}
-			
+
 		}
-		
+
 	}
 
 };
