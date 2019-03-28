@@ -92,16 +92,16 @@ public:
 			}
 
 
-			for (int i = 0; i < il_galezi; i++) {
+			/*for (int i = 0; i < il_galezi; i++) {
 				for (int j = 0; j < 3; j++) {
 					std::cout << drogi_temp[i][j] << " ";
 				}
 				std::cout << std::endl;
-			}
-			analiza();
-			for (int i = 0; i < il_galezi; i++) {
+			}*/
+			std::cout<<analiza()<<std::endl;
+			/*for (int i = 0; i < il_galezi; i++) {
 				std::cout << dobre[i] << " ";
-			}
+			}*/
 			std::cin >> pierwsza_dana;
 			std::cin >> druga_dana;
 		}
@@ -109,13 +109,14 @@ public:
 
 	}
 
-	void analiza() {
+	int analiza() {
 		for (int i = 0; i < il_galezi; i++) {
 			dobre[i] = -1;
 			zle[i] = -1;
 		}
 		int licznik_d = 0;
-		int licznik_z = 0;
+		int licznik_p = 1;
+		int min = drogi[0][2];
 		int poczatek = pierwsza_dana;
 		int koniec = druga_dana;
 		int il_osob = trzecia_dana;
@@ -124,7 +125,7 @@ public:
 		dobre[licznik_d] = wsp[0];
 
 		while (wsp[2] != koniec) {
-			std::cout << "WSP0:" << wsp[0] << " WSP1:" << wsp[1] << " WSP2:" << wsp[2] << std::endl;
+			//std::cout << "WSP0:" << wsp[0] << " WSP1:" << wsp[1] << " WSP2:" << wsp[2] << std::endl;
 			if (czy_istnieje_dalej(wsp[2]) == true) {
 				wyszukaj(wsp[2]);
 				licznik_d++;
@@ -139,15 +140,31 @@ public:
 				wyszukaj(wsp[1]);
 				dobre[licznik_d] = wsp[0];
 			}
-			for (int i = 0; i < il_galezi; i++) {
+			/*for (int i = 0; i < il_galezi; i++) {
 				std::cout << dobre[i] << " ";
 			}
 			std::cout << std::endl;
 			for (int i = 0; i < il_galezi; i++) {
 				std::cout << zle[i] << " ";
 			}
-			std::cout << std::endl;
+			std::cout << std::endl;*/
 		}
+		for (int i = 0; i <= licznik_d; i++) {
+			if (drogi[dobre[i]][2] < min) {
+				min = drogi[dobre[i]][2];
+			}
+		}
+		int suma = min+1;
+		while (1) {
+			if (suma < il_osob) {
+				suma = suma + min+1;
+				licznik_p++;
+			}
+			else {
+				break;
+			}
+		}
+		return licznik_p;
 
 	}
 
