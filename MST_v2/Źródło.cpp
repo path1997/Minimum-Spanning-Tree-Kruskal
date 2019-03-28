@@ -1,39 +1,19 @@
 #include<iostream>
 #include<string>
 #include<cstdlib>
-#include<queue>
-
-/*struct droga {
-	int w1;
-	int w2;
-	int waga;
-	droga(int w1, int w2, int waga) {
-		this->w1 = w1;
-		this->w2 = w2;
-		this->waga = waga;
-	}
-	friend bool operator<(const droga& a, const droga& b) {
-		return a.waga < b.waga;
-	}
-	friend std::ostream& operator<<(std::ostream& o, const droga& d) {
-		return o << d.waga;
-	}
-};*/
 
 class MST {
 public:
 
-	int **drogi, *kolor, pierwsza_dana, druga_dana, trzecia_dana, il_miast, il_drog, il_galezi = 0, *dobre, *zle, *wsp,**drogi_temp;
+	int **drogi, *kolor, pierwsza_dana, druga_dana, trzecia_dana, il_miast, il_drog, il_galezi, *dobre, *wsp,**drogi_temp;
 
 	MST() {
-	}
-
-	~MST() {
-		/*for (int i = 0; i < il_drog; i++) {
-			delete[] drogi[i];
-		}
-		delete[] drogi;
-		delete[] kolor;*/
+		pierwsza_dana = 0;
+		druga_dana = 0;
+		trzecia_dana = 0;
+		il_miast = 0;
+		il_drog=0;
+		il_galezi = 0;
 	}
 
 	void start() {
@@ -74,7 +54,6 @@ public:
 			}
 		}
 		dobre = new int[il_galezi];
-		zle = new int[il_galezi];
 		drogi_temp = new int *[il_galezi];
 		for (int i = 0; i < il_galezi; i++) {
 			drogi_temp[i] = new int[3];
@@ -106,13 +85,23 @@ public:
 			std::cin >> druga_dana;
 		}
 
+		for (int i = 0; i < il_drog; i++) {
+			delete[] drogi[i];
+		}
+		for (int i = 0; i < il_galezi; i++) {
+			delete[] drogi_temp[i];
+		}
 
+		delete[] drogi_temp;
+		delete[] kolor;
+		delete[] drogi;
+		delete[] wsp;
+		delete[] dobre;
 	}
 
 	int analiza() {
 		for (int i = 0; i < il_galezi; i++) {
 			dobre[i] = -1;
-			zle[i] = -1;
 		}
 		int licznik_d = 0;
 		int licznik_p = 1;
@@ -137,17 +126,14 @@ public:
 				drogi_temp[dobre[licznik_d]][2] = -1;
 				//licznik_z++;
 				dobre[licznik_d] = -1;
-				wyszukaj(wsp[1]);
-				dobre[licznik_d] = wsp[0];
+				licznik_d--;
+				wsp[2] = wsp[1];
 			}
 			/*for (int i = 0; i < il_galezi; i++) {
 				std::cout << dobre[i] << " ";
 			}
-			std::cout << std::endl;
-			for (int i = 0; i < il_galezi; i++) {
-				std::cout << zle[i] << " ";
-			}
 			std::cout << std::endl;*/
+
 		}
 		for (int i = 0; i <= licznik_d; i++) {
 			if (drogi[dobre[i]][2] < min) {
@@ -213,71 +199,6 @@ public:
 		return false;
 	}
 
-	/*void analiza() {
-		int d = 0;
-		int z = 0;
-		int poczatek = pierwsza_dana;
-		int koniec = druga_dana;
-		int il_osob = trzecia_dana;
-		wyszukaj(poczatek);
-		dobre[d] = wsp[2];
-		d++;
-		while (wsp[1] != koniec) {
-			std::cout <<"KONIEC: "<< wsp[1]<<std::endl;
-			if (czy_istnieje_droga(wsp[1]) == true) {
-				wyszukaj(wsp[1]);
-				dobre[d] = wsp[2];
-				d++;
-				std::cout << "WSP1: " << wsp[1] <<std::endl;
-			}
-			else {
-				zle[z] = wsp[2];
-				z++;
-				for (int r = 0; r < il_galezi; r++) {
-					dobre[r] = -1;
-				}
-				d = 0;
-				wsp[1] = poczatek;
-			}
-		}
-	}
-	bool czy_istnieje_droga(int liczba) {
-		for (int z = 0; z < il_galezi; z++) {
-			for (int x = 0; x < il_galezi; x++) {
-				if (z != dobre[x] && z!=zle[x]) {
-					if (drogi[z][0] == liczba || drogi[z][1] == liczba) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
-	void wyszukaj(int liczba) {
-		bool stan2 = false;
-		for (int k = 0; k < il_galezi; k++) {
-			for (int l = 0; l < il_galezi; l++) {
-				if (k == zle[l] || k == zle[l]) {
-					stan2 = true;
-					break;
-				}
-			}
-			if (stan2 == false) {
-				if (drogi[k][0] == liczba) {
-					wsp[0] = drogi[k][0];
-					wsp[1] = drogi[k][1];
-					wsp[2] = k;
-					return;
-				}
-				else if (drogi[k][1] == liczba) {
-					wsp[1] = drogi[k][0];
-					wsp[0] = drogi[k][1];
-					wsp[2] = k;
-					return;
-				}
-			}
-		}
-	}*/
 
 	void sortowanie_drog()
 	{
