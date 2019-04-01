@@ -46,7 +46,7 @@ public:
 		for (int i = 0; i < il_drog; i++) {
 			if (kolor[drogi[i][0]] != kolor[drogi[i][1]]) {
 				zamien(kolor[drogi[i][0]], kolor[drogi[i][1]]);
-				std::cout << drogi[i][0] << " " << drogi[i][1] << " " << drogi[i][2] << std::endl;
+				//std::cout << drogi[i][0] << " " << drogi[i][1] << " " << drogi[i][2] << std::endl;
 				drogi[il_galezi][0] = drogi[i][0];
 				drogi[il_galezi][1] = drogi[i][1];
 				drogi[il_galezi][2] = drogi[i][2];
@@ -114,10 +114,10 @@ public:
 		
 		wyszukaj(poczatek);
 		dobre[licznik_d] = wsp[0];
-		std::cout << "POCZATEK: " << poczatek << " KONIEC: " << koniec<<std::endl;
-		std::cout << "WSP2:" << wsp[2] <<" "<<koniec<< std::endl;
+		//std::cout << "POCZATEK: " << poczatek << " KONIEC: " << koniec<<std::endl;
+		//std::cout << "WSP2:" << wsp[2] <<" "<<koniec<< std::endl;
 		while (wsp[2] != koniec) {
-			std::cout << "WSP0:" << wsp[0] << " WSP1:" << wsp[1] << " WSP2:" << wsp[2] << std::endl;
+			//std::cout << "WSP0:" << wsp[0] << " WSP1:" << wsp[1] << " WSP2:" << wsp[2] << std::endl;
 			if (czy_istnieje_dalej(wsp[2]) == true) {
 				wyszukaj(wsp[2]);
 				licznik_d++;
@@ -136,10 +136,10 @@ public:
 				
 			}
 			//std::cout << "WSP0:" << wsp[0] << " WSP1:" << wsp[1] << " WSP2:" << wsp[2] << std::endl;
-			for (int i = 0; i < il_galezi; i++) {
+			/*for (int i = 0; i < il_galezi; i++) {
 				std::cout << dobre[i] << " ";
 			}
-			std::cout << std::endl;
+			std::cout << std::endl;*/
 
 		}
 		for (int i = 0; i <= licznik_d; i++) {
@@ -147,12 +147,12 @@ public:
 				min = drogi[dobre[i]][2];
 			}
 		}
-		std::cout << "MIN: " << min<<std::endl;
+		//std::cout << "MIN: " << min<<std::endl;
 		int suma = min;
 		il_osob++;
 		while (1) {
 			if (suma <= il_osob) {
-				suma = suma + min+1;
+				suma = suma + min;
 				licznik_p++;
 				il_osob++;
 			}
@@ -172,7 +172,7 @@ public:
 			for (int v = 0; v < il_galezi; v++) {
 				if (c == dobre[v]) {
 					stan_wyszukaj = true;
-					std::cout << "TRUE";
+					//std::cout << "TRUE";
 				}
 			}
 			if (stan_wyszukaj == false) {
