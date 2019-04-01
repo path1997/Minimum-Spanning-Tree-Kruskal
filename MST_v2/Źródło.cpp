@@ -41,12 +41,12 @@ public:
 			drogi[i][1] = druga_dana;
 			drogi[i][2] = trzecia_dana;
 		}
-		sortowanie_drog();
+		sortowanie_szybkie(0,il_drog-1);
 
 		for (int i = 0; i < il_drog; i++) {
 			if (kolor[drogi[i][0]] != kolor[drogi[i][1]]) {
 				zamien(kolor[drogi[i][0]], kolor[drogi[i][1]]);
-				//std::cout << drogi[i][0] << " " << drogi[i][1] << " " << drogi[i][2] << std::endl;
+				std::cout << drogi[i][0] << " " << drogi[i][1] << " " << drogi[i][2] << std::endl;
 				drogi[il_galezi][0] = drogi[i][0];
 				drogi[il_galezi][1] = drogi[i][1];
 				drogi[il_galezi][2] = drogi[i][2];
@@ -77,7 +77,9 @@ public:
 				}
 				std::cout << std::endl;
 			}*/
-			std::cout<<analiza()<<std::endl;
+			if (pierwsza_dana != druga_dana) {
+				std::cout << analiza() << std::endl;
+			}
 			/*for (int i = 0; i < il_galezi; i++) {
 				std::cout << dobre[i] << " ";
 			}*/
@@ -109,30 +111,35 @@ public:
 		int poczatek = pierwsza_dana;
 		int koniec = druga_dana;
 		int il_osob = trzecia_dana;
-
+		
 		wyszukaj(poczatek);
 		dobre[licznik_d] = wsp[0];
-
+		std::cout << "POCZATEK: " << poczatek << " KONIEC: " << koniec<<std::endl;
+		std::cout << "WSP2:" << wsp[2] <<" "<<koniec<< std::endl;
 		while (wsp[2] != koniec) {
-			//std::cout << "WSP0:" << wsp[0] << " WSP1:" << wsp[1] << " WSP2:" << wsp[2] << std::endl;
+			std::cout << "WSP0:" << wsp[0] << " WSP1:" << wsp[1] << " WSP2:" << wsp[2] << std::endl;
 			if (czy_istnieje_dalej(wsp[2]) == true) {
 				wyszukaj(wsp[2]);
 				licznik_d++;
 				dobre[licznik_d] = wsp[0];
 			}
 			else {
+				wsp[2] = drogi_temp[dobre[licznik_d]][0];
 				drogi_temp[dobre[licznik_d]][0]=-1;
 				drogi_temp[dobre[licznik_d]][1] = -1;
 				drogi_temp[dobre[licznik_d]][2] = -1;
 				//licznik_z++;
+				
 				dobre[licznik_d] = -1;
 				licznik_d--;
-				wsp[2] = wsp[1];
+				//wyszukaj(wsp[2]);
+				
 			}
-			/*for (int i = 0; i < il_galezi; i++) {
+			//std::cout << "WSP0:" << wsp[0] << " WSP1:" << wsp[1] << " WSP2:" << wsp[2] << std::endl;
+			for (int i = 0; i < il_galezi; i++) {
 				std::cout << dobre[i] << " ";
 			}
-			std::cout << std::endl;*/
+			std::cout << std::endl;
 
 		}
 		for (int i = 0; i <= licznik_d; i++) {
@@ -140,16 +147,20 @@ public:
 				min = drogi[dobre[i]][2];
 			}
 		}
-		int suma = min+1;
+		std::cout << "MIN: " << min<<std::endl;
+		int suma = min;
+		il_osob++;
 		while (1) {
-			if (suma < il_osob) {
+			if (suma <= il_osob) {
 				suma = suma + min+1;
 				licznik_p++;
+				il_osob++;
 			}
 			else {
 				break;
 			}
 		}
+		std::cout << "OSOBY: " << il_osob<<std::endl;
 		return licznik_p;
 
 	}
@@ -161,21 +172,22 @@ public:
 			for (int v = 0; v < il_galezi; v++) {
 				if (c == dobre[v]) {
 					stan_wyszukaj = true;
+					std::cout << "TRUE";
 				}
-				if (stan_wyszukaj == false) {
-					if (drogi_temp[c][0] == liczba) {
-						wsp[0] = c;
-						wsp[1] = drogi_temp[c][0];
-						wsp[2] = drogi_temp[c][1];
-						return;
-					}
-					else if (drogi_temp[c][1] == liczba) {
-						wsp[0] = c;
-						wsp[2] = drogi_temp[c][0];
-						wsp[1] = drogi_temp[c][1];
-						std::swap(drogi_temp[c][0], drogi_temp[c][1]);
-						return;
-					}
+			}
+			if (stan_wyszukaj == false) {
+				if (drogi_temp[c][0] == liczba) {
+					wsp[0] = c;
+					wsp[1] = drogi_temp[c][0];
+					wsp[2] = drogi_temp[c][1];
+					return;
+				}
+				else if (drogi_temp[c][1] == liczba) {
+					wsp[0] = c;
+					wsp[2] = drogi_temp[c][0];
+					wsp[1] = drogi_temp[c][1];
+					std::swap(drogi_temp[c][0], drogi_temp[c][1]);
+					return;
 				}
 			}
 		}
@@ -200,7 +212,7 @@ public:
 	}
 
 
-	void sortowanie_drog()
+	void sortowanie_babelkowe()
 	{
 		for (int i = 0; i < il_drog; i++) {
 			for (int j = 1; j < il_drog - i; j++) {
@@ -212,6 +224,42 @@ public:
 			}
 		}
 	}
+
+	void sortowanie_szybkie(int lewa, int prawa)
+	{
+		int i = lewa;
+		int j = prawa;
+		int x = drogi[(lewa + prawa) / 2][2];
+		do
+		{
+			while (drogi[i][2] > x) {
+				i++;
+			}
+
+			while (drogi[j][2] < x) {
+				j--;
+			}
+
+			if (i <= j)
+			{
+				std::swap(drogi[i][2], drogi[j][2]);
+				std::swap(drogi[i][1], drogi[j][1]);
+				std::swap(drogi[i][0], drogi[j][0]);
+
+				i++;
+				j--;
+			}
+		} while (i <= j);
+
+		if (lewa < j) {
+			sortowanie_szybkie(lewa, j);
+		}
+
+		if (prawa > i) {
+			sortowanie_szybkie(i, prawa);
+		}
+	}
+
 	void zamien(int x, int y) {
 		for (int k = 1; k <= il_miast; k++) {
 			if (y == kolor[k]) {
