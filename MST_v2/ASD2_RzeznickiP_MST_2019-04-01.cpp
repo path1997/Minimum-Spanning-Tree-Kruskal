@@ -160,7 +160,7 @@ public:
 				break;
 			}
 		}
-		std::cout << "OSOBY: " << il_osob<<std::endl;
+		//std::cout << "OSOBY: " << il_osob<<std::endl;
 		return licznik_p;
 
 	}
